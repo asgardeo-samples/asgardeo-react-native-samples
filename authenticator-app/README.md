@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="./assets/images/full-logo-white.png" alt="Asgardeo Logo" width="150"/>
+  <img src="./assets/images/logo.png" alt="Asgardeo Logo" width="50" align="center"/>
   
-  # 🛡️ Asgardeo React Native Authenticator App
+  <h1 align="center">Asgardeo React Native Authenticator App</h1>
   
   <p align="center">
     <strong>Secure, Modern, and User-Friendly Authentication</strong>
