@@ -1,50 +1,56 @@
-# Welcome to your Expo app 👋
+<div align="center">
+  <img src="./assets/images/full-logo-white.png" alt="Asgardeo Logo" width="150"/>
+  
+  # 🛡️ Asgardeo React Native Authenticator App
+  
+  <p align="center">
+    <strong>Secure, Modern, and User-Friendly Authentication</strong>
+  </p>
+  
+  <p align="center">
+    A comprehensive React Native authenticator application built with Asgardeo Identity and Access Management platform. 
+    Experience seamless multi-factor authentication, TOTP generation, and push notifications in a beautifully crafted mobile interface.
+  </p>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+  <p align="center">
+    <img src="https://img.shields.io/badge/React%20Native-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React Native"/>
+    <img src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white" alt="Expo"/>
+    <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
+    <img src="https://img.shields.io/badge/Asgardeo-FF6B35?style=for-the-badge" alt="Asgardeo"/>
+  </p>
 
-## Get started
+  <p align="center">
+    <a href="#-features">Features</a> •
+    <a href="#-quick-start">Quick Start</a> •
+    <a href="#-architecture">Architecture</a> •
+    <a href="#-contributing">Contributing</a>
+  </p>
+</div>
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## ✨ Features
 
-2. Start the app
+🔐 **Multi-Factor Authentication**
+- TOTP (Time-based One-Time Password) generation
+- QR code scanning for easy account setup
+- Secure local authentication with biometrics
 
-   ```bash
-   npx expo start
-   ```
+📱 **Push Authentication**
+- Real-time push notifications
+- Authentication history tracking
+- Seamless approve/deny workflows
 
-In the output, you'll find options to open the app in a
+🎨 **Modern UI/UX**
+- Clean and intuitive interface
+- Dark/Light theme support
+- Smooth animations and transitions
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+🔒 **Security First**
+- End-to-end encryption
+- Secure storage implementation
+- Local authentication verification
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🚀 Quick Start
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Get your Asgardeo Authenticator App up and running in minutes!
