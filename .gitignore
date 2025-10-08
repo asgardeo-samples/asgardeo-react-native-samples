@@ -25,3 +25,10 @@ replay_pid*
 
 # OS generated files
 .DS_Store
+
+node_modules
+npm-debug.log
+yarn-error.log
+.env
+android
+ios
