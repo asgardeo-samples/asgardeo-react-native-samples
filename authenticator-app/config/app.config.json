@@ -5,7 +5,7 @@
   "appLogoPath": "assets/images/logo/asgardeo-full-logo.png",
   "devMode": {
     "enabled": true,
-    "host": "http://10.10.16.152:8082"
+    "host": "http://:8082"
   },
   "security": {
     "enableAppScreenLocks": true,
