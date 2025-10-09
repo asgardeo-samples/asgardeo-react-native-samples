@@ -23,21 +23,21 @@
 
 ## 📚 Table of Contents
 
-- [✨ Features](#-features)
-- [🚀 Quick Start](#-quick-start)
-  - [🧪 Tested Platform Versions](#-tested-platform-versions)
-  - [📋 Prerequisites](#-prerequisites)
-  - [🔧 Initial Setup](#-initial-setup)
-  - [⚙️ Configuration](#️-configuration)
-    - [🔥 Firebase Cloud Messaging (FCM) Setup](#-firebase-cloud-messaging-fcm-setup)
-    - [🍎 Apple Developer Account Setup](#-apple-developer-account-setup)
-  - [▶️ Run on Device](#️-run-on-device)
-    - [📝 Update Bundle ID](#-update-bundle-id)
-    - [🤖 Android Device Setup](#-android-device-setup)
-    - [🍎 iOS Device Setup](#-ios-device-setup)
-  - [🏆 Production Build](#-production-build)
-- [⚒️ Application configurations and theming](#-application-configurations-and-theming)
-- [🏗️ Architecture](#-architecture)
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+  - [Tested Platform Versions](#-tested-platform-versions)
+  - [Prerequisites](#-prerequisites)
+  - [Initial Setup](#-initial-setup)
+  - [Configuration](#️-configuration)
+    - [Firebase Cloud Messaging (FCM) Setup](#-firebase-cloud-messaging-fcm-setup)
+    - [Apple Developer Account Setup](#-apple-developer-account-setup)
+  - [Run on Device](#️-run-on-device)
+    - [Update Bundle ID](#-update-bundle-id)
+    - [Android Device Setup](#-android-device-setup)
+    - [iOS Device Setup](#-ios-device-setup)
+  - [Production Build](#-production-build)
+- [Application configurations and theming](#-application-configurations-and-theming)
+- [Architecture](#-architecture)
 
 ---
 
