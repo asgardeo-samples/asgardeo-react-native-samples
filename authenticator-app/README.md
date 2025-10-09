@@ -199,12 +199,7 @@ Push notifications on iOS require proper Apple Developer account configuration.
 8. **Download** the provisioning profile (`.mobileprovision` file)
 9. **Install** the provisioning profile on your Mac:
    - Double-click the downloaded `.mobileprovision` file, or
-   - Drag and drop it into Xcode, or
-   - Use the command line:
-
-     ```bash
-     open ~/Downloads/YourProfile.mobileprovision
-     ```
+   - Drag and drop it into Xcode.
 
 > [!TIP]
 > Official Guide: [Create a Provisioning Profile](https://developer.apple.com/help/account/provisioning-profiles/create-a-development-provisioning-profile)
