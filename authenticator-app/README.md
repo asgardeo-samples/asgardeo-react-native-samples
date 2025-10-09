@@ -116,13 +116,7 @@ Push notifications are essential for the authenticator app functionality. Comple
 > [!TIP]
 > Official Guide: [Add Firebase to iOS](https://firebase.google.com/docs/ios/setup)
 
-##### Step 3: Enable Cloud Messaging
-
-1. In Firebase Console, go to **Project Settings** > **Cloud Messaging** tab
-2. Enable **Firebase Cloud Messaging API (V1)**
-3. Note down your **Server Key** and **Sender ID**
-
-##### Step 4: Upload APNs Authentication Key to Firebase
+##### Step 3: Upload APNs Authentication Key to Firebase
 
 For iOS push notifications to work, you need to upload your Apple Push Notification service (APNs) authentication key to Firebase.
 
@@ -134,7 +128,7 @@ For iOS push notifications to work, you need to upload your Apple Push Notificat
 > [!TIP]
 > Official Guide: [Set up APNs with FCM](https://firebase.google.com/docs/cloud-messaging/ios/certs)
 
-##### Step 5: Configure Asgardeo Push Provider
+##### Step 4: Configure Asgardeo Push Provider
 
 1. Download the Firebase service account JSON file:
    - In Firebase Console, go to **Project Settings** > **Service accounts**
@@ -158,9 +152,6 @@ config/
 ├── google-services.json         # 🔥 Firebase Android config
 ├── GoogleService-Info.plist     # 🔥 Firebase iOS config
 ```
-
-> [!WARNING]
-> **Security Note**: Never commit these files to public repositories. Add them to `.gitignore` for production apps.
 
 #### 🍎 Apple Developer Account Setup
 
@@ -210,12 +201,13 @@ Push notifications on iOS require proper Apple Developer account configuration.
    - Double-click the downloaded `.mobileprovision` file, or
    - Drag and drop it into Xcode, or
    - Use the command line:
+
      ```bash
      open ~/Downloads/YourProfile.mobileprovision
      ```
 
 > [!TIP]
-> Official Guide: [Create a Provisioning Profile](https://developer.apple.com/help/account/manage-profiles/create-a-development-provisioning-profile/)
+> Official Guide: [Create a Provisioning Profile](https://developer.apple.com/help/account/provisioning-profiles/create-a-development-provisioning-profile)
 
 ##### Step 4: Generate APNs Authentication Key
 
@@ -230,7 +222,7 @@ This key is needed for Firebase Cloud Messaging to send push notifications to iO
 7. Note down the **Key ID** and **Team ID** (found in top-right corner)
 
 > [!TIP]
-> Official Guide: [Create APNs Authentication Key](https://developer.apple.com/help/account/manage-keys/create-api-keys-for-app-services/)
+> Official Guide: [Create APNs Authentication Key](https://developer.apple.com/help/account/keys/create-a-private-key)
 
 ##### Step 5: Upload APNs Key to Firebase
 
@@ -241,11 +233,6 @@ This key is needed for Firebase Cloud Messaging to send push notifications to iO
 > Keep your `.p8` file secure! You cannot download it again from Apple Developer Portal.
 
 ### ▶️ Run on Device
-
-Choose your platform to get started:
-
-- 🤖 [Android](#-android-device-setup)
-- 🍎 [iOS](#-ios-device-setup)
 
 #### 🤖 Android Device Setup
 
