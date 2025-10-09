@@ -1,13 +1,11 @@
 {
   "appHeaderText": "Authenticator",
-  "appLogoPath": "assets/images/logo/asgardeo-full-logo.png",
   "devMode": {
-    "enabled": true,
+    "enabled": false,
     "host": ""
   },
   "security": {
-    "enableAppScreenLocks": true,
-    "enableSettingsScreenLock": true
+    "enableAppScreenLocks": false
   },
   "feature": {
     "push": {
@@ -41,14 +39,6 @@
             "secondary": {
               "background": "#f0f1f3ff",
               "text": "#868c99ff"
-            },
-            "success": {
-              "background": "#4CAF50",
-              "text": "#ffffff"
-            },
-            "danger": {
-              "background": "#F44336",
-              "text": "#ffffff"
             }
           },
           "typography": {
