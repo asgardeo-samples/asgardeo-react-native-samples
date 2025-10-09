@@ -20,9 +20,7 @@
 
   <p align="center">
     <a href="#-features">Features</a> •
-    <a href="#-quick-start">Quick Start</a> •
-    <a href="#-architecture">Architecture</a> •
-    <a href="#-contributing">Contributing</a>
+    <a href="#-quick-start">Quick Start</a>
   </p>
 </div>
 
@@ -300,35 +298,3 @@ npx expo run:ios --device
    - On iOS, Apple Push Notification (APN) Service will be integrated with FCM to deliver notifications.
 
 For more details, refer to the [codebase](./docs/CODE.md) and [configuration](./docs/CONFIGURATION.md).
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](../../CONTRIBUTING.md) for details.
-
----
-
-## 📄 License
-
-This project is licensed under the Apache License 2.0 - see the [LICENSE](../../LICENSE) file for details.
-
----
-
-## 📞 Support
-
-For support and questions:
-- 📧 Email: [asgardeo@wso2.com](mailto:asgardeo@wso2.com)
-- 📖 Documentation: [Asgardeo Documentation](https://wso2.com/asgardeo/docs/)
-- 💬 Community: [Asgardeo Discord](https://discord.gg/wso2)
-
----
-
-<div align="center">
-  <p>Made with ❤️ by the Asgardeo Team</p>
-  <p>
-    <a href="https://wso2.com/asgardeo/">Website</a> •
-    <a href="https://wso2.com/asgardeo/docs/">Docs</a> •
-    <a href="https://github.com/asgardeo">GitHub</a>
-  </p>
-</div>
