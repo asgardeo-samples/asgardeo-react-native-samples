@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/images/logo.png" alt="Asgardeo Logo" width="100" align="center"/>
+  <img src="./docs/images/logo.png" alt="Asgardeo Logo" width="100" align="center"/>
   
   <h1 align="center">Asgardeo Authenticator</h1>
   
