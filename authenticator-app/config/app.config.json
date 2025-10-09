@@ -1,7 +1,5 @@
 {
-  "appName": "Asgardeo",
   "appHeaderText": "Authenticator",
-  "appIconPath": "assets/images/logo/asgardeo-logo.png",
   "appLogoPath": "assets/images/logo/asgardeo-full-logo.png",
   "devMode": {
     "enabled": true,

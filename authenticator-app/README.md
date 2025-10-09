@@ -1,15 +1,15 @@
 <div align="center">
   <img src="./assets/images/logo.png" alt="Asgardeo Logo" width="100" align="center"/>
   
-  <h1 align="center">Asgardeo React Native Authenticator App</h1>
+  <h1 align="center">Asgardeo Authenticator</h1>
   
   <p align="center">
-    <strong>Secure, Modern, and User-Friendly Authentication</strong>
+    <strong>React Native Mobile Application for Multi-Factor Authentication</strong>
   </p>
   
   <p align="center">
-    A comprehensive React Native authenticator application built with Asgardeo Identity and Access Management platform. 
-    Experience seamless multi-factor authentication, TOTP generation, and push notifications in a beautifully crafted mobile interface.
+    A mobile authenticator application built with React Native and <a href="https://wso2.com/asgardeo/">Asgardeo</a> Identity and Access Management platform. 
+    Enables TOTP and push notification based authentication for secure multi-factor authentication on iOS and Android devices.
   </p>
 
   <p align="center">
