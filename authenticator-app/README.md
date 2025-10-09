@@ -234,6 +234,35 @@ This key is needed for Firebase Cloud Messaging to send push notifications to iO
 
 ### ▶️ Run on Device
 
+Before running the app on your device, update the bundle identifiers to match your Firebase and Apple Developer configurations.
+
+#### 📝 Update Bundle ID
+
+Edit the `app.json` file in the project root and update the following:
+
+```json
+{
+  "expo": {
+    ...
+    "ios": {
+      ...
+      "bundleIdentifier": "com.yourcompany.authenticator"
+      ...
+    },
+    "android": {
+      ...
+      "package": "com.yourcompany.authenticator"
+      ...
+    }
+    ...
+  }
+}
+```
+
+> [!IMPORTANT]
+> - The **iOS bundleIdentifier** must match the Bundle ID you configured in [Apple Developer Portal](#step-1-create-app-id-with-push-notifications)
+> - The **Android package** must match the package name you configured in [Firebase Console](#step-2-configure-firebase-apps)
+
 #### 🤖 Android Device Setup
 
 > [!TIP]
