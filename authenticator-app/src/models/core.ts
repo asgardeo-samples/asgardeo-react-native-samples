@@ -92,10 +92,6 @@ export interface SecurityConfig {
    * Enable or disable app screen locks.
    */
   enableAppScreenLocks: boolean;
-  /**
-   * Enable or disable settings screen lock.
-   */
-  enableSettingsScreenLock: boolean;
 }
 
 /**
