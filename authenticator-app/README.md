@@ -284,7 +284,7 @@ npx expo run:ios --device
 
 ## 🏗️ Architecture
 
-![High Level Architecture Diagram](../docs/images/high-level-architecture-diagram.png)
+![High Level Architecture Diagram](./docs/images/high-level-architecture-diagram.png)
 
 - **Cross-platform application**: A React Native mobile application to support both push-based authentication and TOTP authentication.
 - **Ease of use**: Users can install the application on their mobile devices and use it without sign in.
