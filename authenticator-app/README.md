@@ -30,7 +30,7 @@
 
 ## ✨ Features
 
-🔐 **Core Authentication Features**
+🔐 **Core Features**
 - **Easy Account Setup** - Seamless account registration using in-app QR scanner
 - **TOTP Code Generation** - Real-time TOTP generation with next token and expiry time indicator
 - **Multi-State Push Notifications** - Push notification delivery across background, foreground, and app quit states
@@ -48,7 +48,17 @@
 
 Get your Asgardeo Authenticator App up and running in minutes!
 
-> ⚠️ **Important**: Use physical devices instead of emulators for testing push notifications. Emulators may not properly handle FCM push messages and biometric authentication.
+> [!IMPORTANT]
+> Use physical devices instead of emulators for testing push notifications. Emulators may not properly handle FCM push messages and biometric authentication.
+
+### � Tested Platform Versions
+
+This application has been tested on the following platform versions:
+
+| Platform | Version | Build Name |
+|----------|---------|------------|
+| Android  | 16      | Baklava    |
+| iOS      | 18.4.1  | -          |
 
 ### 📋 Prerequisites
 
