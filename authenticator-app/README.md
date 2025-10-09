@@ -284,3 +284,56 @@ npx expo run:android
 # Run the application on your iOS device
 npx expo run:ios --device
 ```
+
+---
+
+## 🏗️ Architecture
+
+![High Level Architecture Diagram](../docs/images/high-level-architecture-diagram.png)
+
+- **Cross-platform application**: A React Native mobile application to support both push-based authentication and TOTP authentication.
+- **Ease of use**: Users can install the application on their mobile devices and use it without sign in.
+- **Device registration**: For both push authentication and TOTP, users can scan a QR code to register their device for authentication.
+- **Secure storage for push authentication**:
+   - A key pair is generated on the mobile application.
+   - The private key is securely stored in the iOS Keychain and Android Keystore.
+   - The public key is transmitted to Asgardeo for push authentication signature verification.
+- **Data storage**: Account details, device ID, TOTP period, and user/organization details will be stored in React Native Async Storage (key-value pair storage).
+- **Push notifications**:
+   - Firebase Cloud Messaging (FCM) is used to deliver push notifications to both iOS and Android devices.
+   - On Android, FCM delivers notifications directly.
+   - On iOS, Apple Push Notification (APN) Service will be integrated with FCM to deliver notifications.
+
+For more details, refer to the [codebase](./docs/CODE.md) and [configuration](./docs/CONFIGURATION.md).
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](../../CONTRIBUTING.md) for details.
+
+---
+
+## 📄 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](../../LICENSE) file for details.
+
+---
+
+## 📞 Support
+
+For support and questions:
+- 📧 Email: [asgardeo@wso2.com](mailto:asgardeo@wso2.com)
+- 📖 Documentation: [Asgardeo Documentation](https://wso2.com/asgardeo/docs/)
+- 💬 Community: [Asgardeo Discord](https://discord.gg/wso2)
+
+---
+
+<div align="center">
+  <p>Made with ❤️ by the Asgardeo Team</p>
+  <p>
+    <a href="https://wso2.com/asgardeo/">Website</a> •
+    <a href="https://wso2.com/asgardeo/docs/">Docs</a> •
+    <a href="https://github.com/asgardeo">GitHub</a>
+  </p>
+</div>
