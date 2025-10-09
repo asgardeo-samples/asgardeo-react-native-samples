@@ -1,10 +1,6 @@
 # 📋 Asgardeo Authenticator - Codebase Documentation
 
-## 🏗️ Project Overview
-
-This is a comprehensive React Native mobile application built for the **Asgardeo Identity and Access Management platform**. The application provides Multi-Factor Authentication (MFA) capabilities including **TOTP (Time-based One-Time Password)** generation and **push notification authentication** on both iOS and Android devices.
-
-### Technology Stack
+## 🧑‍💻 Technology Stack
 
 - **Framework**: React Native 0.79.6 with Expo ~53.0.22
 - **Language**: TypeScript 5.8.3
