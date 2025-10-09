@@ -8,7 +8,7 @@
   </p>
   
   <p align="center">
-    A mobile authenticator application built with React Native and <a href="https://wso2.com/asgardeo/">Asgardeo</a> Identity and Access Management platform that enables TOTP and push notification based authentication on iOS and Android devices.
+    A reference mobile authenticator application built with React Native and <a href="https://wso2.com/asgardeo/">Asgardeo</a> Identity and Access Management platform that enables TOTP and push notification based authentication on iOS and Android devices.
   </p>
 
   <p align="center">
@@ -17,12 +17,27 @@
     <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
     <img src="https://img.shields.io/badge/Asgardeo-FF6B35?style=for-the-badge" alt="Asgardeo"/>
   </p>
-
-  <p align="center">
-    <a href="#-features">Features</a> •
-    <a href="#-quick-start">Quick Start</a>
-  </p>
 </div>
+
+---
+
+## 📚 Table of Contents
+
+- [✨ Features](#-features)
+- [🚀 Quick Start](#-quick-start)
+  - [🧪 Tested Platform Versions](#-tested-platform-versions)
+  - [📋 Prerequisites](#-prerequisites)
+  - [🔧 Initial Setup](#-initial-setup)
+  - [⚙️ Configuration](#️-configuration)
+    - [🔥 Firebase Cloud Messaging (FCM) Setup](#-firebase-cloud-messaging-fcm-setup)
+    - [🍎 Apple Developer Account Setup](#-apple-developer-account-setup)
+  - [▶️ Run on Device](#️-run-on-device)
+    - [📝 Update Bundle ID](#-update-bundle-id)
+    - [🤖 Android Device Setup](#-android-device-setup)
+    - [🍎 iOS Device Setup](#-ios-device-setup)
+  - [🏆 Production Build](#-production-build)
+- [⚒️ Application configurations and theming](#-application-configurations-and-theming)
+- [🏗️ Architecture](#-architecture)
 
 ---
 
@@ -283,23 +298,10 @@ npx expo run:ios --device
 > [!TIP]
 > Follow the [Expo Guide](https://docs.expo.dev/deploy/build-project/) for detailed instructions on setting up your production build.
 
----
+## ⚒️ Application configurations and theming
+
+For the details, refer to the [configuration](./docs/CONFIGURATION.md) guide.
 
 ## 🏗️ Architecture
 
-![High Level Architecture Diagram](./docs/images/high-level-architecture-diagram.png)
-
-- **Cross-platform application**: A React Native mobile application to support both push-based authentication and TOTP authentication.
-- **Ease of use**: Users can install the application on their mobile devices and use it without sign in.
-- **Device registration**: For both push authentication and TOTP, users can scan a QR code to register their device for authentication.
-- **Secure storage for push authentication**:
-   - A key pair is generated on the mobile application.
-   - The private key is securely stored in the iOS Keychain and Android Keystore.
-   - The public key is transmitted to Asgardeo for push authentication signature verification.
-- **Data storage**: Account details, device ID, TOTP period, and user/organization details will be stored in React Native Async Storage (key-value pair storage).
-- **Push notifications**:
-   - Firebase Cloud Messaging (FCM) is used to deliver push notifications to both iOS and Android devices.
-   - On Android, FCM delivers notifications directly.
-   - On iOS, Apple Push Notification (APN) Service will be integrated with FCM to deliver notifications.
-
-For more details, refer to the [codebase](./docs/CODE.md) and [configuration](./docs/CONFIGURATION.md).
+For the details, refer to the [architecture](./docs/ARCHITECTURE.md) guide.
