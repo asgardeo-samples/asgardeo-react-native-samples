@@ -8,8 +8,7 @@
   </p>
   
   <p align="center">
-    A mobile authenticator application built with React Native and <a href="https://wso2.com/asgardeo/">Asgardeo</a> Identity and Access Management platform. 
-    Enables TOTP and push notification based authentication for secure multi-factor authentication on iOS and Android devices.
+    A mobile authenticator application built with React Native and <a href="https://wso2.com/asgardeo/">Asgardeo</a> Identity and Access Management platform that enables TOTP and push notification based authentication on iOS and Android devices.
   </p>
 
   <p align="center">
