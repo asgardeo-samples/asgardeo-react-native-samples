@@ -35,3 +35,4 @@ ios
 google-services.json
 GoogleService-Info.plist
 expo-env.d.ts
+.expo
