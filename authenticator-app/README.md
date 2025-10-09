@@ -77,6 +77,169 @@ This application has been tested on the following platform versions:
    npm install
    ```
 
+### ⚙️ Configuration
+
+Push notifications are essential for the authenticator app functionality. Complete the following configuration steps before running the application.
+
+#### 🔥 Firebase Cloud Messaging (FCM) Setup
+
+> [!TIP]
+> Official Documentation: [Firebase Setup Guide](https://firebase.google.com/docs/cloud-messaging)
+
+##### Step 1: Create Firebase Project
+
+1. Navigate to [Firebase Console](https://console.firebase.google.com/)
+2. Click **Add project** or select an existing project
+3. Follow the setup wizard to create your project
+
+##### Step 2: Configure Firebase Apps
+
+**For Android:**
+
+1. In Firebase Console, go to **Project Settings** (gear icon)
+2. Under **Your apps**, click **Add app** > Select **Android** icon
+3. Register your app with package name (e.g., `com.yourcompany.authenticator`)
+4. Download the `google-services.json` file
+5. Place it in the `./config/` directory of this project
+
+> [!TIP]
+> Official Guide: [Add Firebase to Android](https://firebase.google.com/docs/android/setup)
+
+**For iOS:**
+
+1. In Firebase Console, go to **Project Settings**
+2. Under **Your apps**, click **Add app** > Select **iOS** icon
+3. Register your app with Bundle ID (e.g., `com.yourcompany.authenticator`)
+4. Download the `GoogleService-Info.plist` file
+5. Place it in the `./config/` directory of this project
+
+> [!TIP]
+> Official Guide: [Add Firebase to iOS](https://firebase.google.com/docs/ios/setup)
+
+##### Step 3: Enable Cloud Messaging
+
+1. In Firebase Console, go to **Project Settings** > **Cloud Messaging** tab
+2. Enable **Firebase Cloud Messaging API (V1)**
+3. Note down your **Server Key** and **Sender ID**
+
+##### Step 4: Upload APNs Authentication Key to Firebase
+
+For iOS push notifications to work, you need to upload your Apple Push Notification service (APNs) authentication key to Firebase.
+
+1. In Firebase Console, go to **Project Settings** > **Cloud Messaging** tab
+2. Scroll to **Apple app configuration** section
+3. Upload your **APNs Authentication Key** (.p8 file) - see [Apple Developer Setup](#-apple-developer-account-setup) below
+4. Enter your **Key ID** and **Team ID**
+
+> [!TIP]
+> Official Guide: [Set up APNs with FCM](https://firebase.google.com/docs/cloud-messaging/ios/certs)
+
+##### Step 5: Configure Asgardeo Push Provider
+
+1. Download the Firebase service account JSON file:
+   - In Firebase Console, go to **Project Settings** > **Service accounts**
+   - Click **Generate new private key**
+   - Download the `service-account.json` file
+
+2. Configure push provider in Asgardeo:
+   - Navigate to your Asgardeo organization
+   - Add the `service-account.json` to Asgardeo push provider configuration
+
+> [!TIP]
+> Official Guide: [Configure Push Provider in Asgardeo](https://wso2.com/asgardeo/docs/guides/notification-channels/configure-push-provider/)
+
+##### Configuration Files Structure
+
+Ensure your `config/` directory has the following structure:
+
+```
+config/
+├── app.config.json              # App configuration
+├── google-services.json         # 🔥 Firebase Android config
+├── GoogleService-Info.plist     # 🔥 Firebase iOS config
+```
+
+> [!WARNING]
+> **Security Note**: Never commit these files to public repositories. Add them to `.gitignore` for production apps.
+
+#### 🍎 Apple Developer Account Setup
+
+> [!TIP]
+> Official Documentation: [Apple Developer Program](https://developer.apple.com/programs/)
+
+Push notifications on iOS require proper Apple Developer account configuration.
+
+##### Step 1: Create App ID with Push Notifications
+
+1. Sign in to [Apple Developer Portal](https://developer.apple.com/account/)
+2. Navigate to **Certificates, Identifiers & Profiles**
+3. Click on **Identifiers** > **+** (Add button)
+4. Select **App IDs** > **Continue**
+5. Select **App** > **Continue**
+6. Configure your App ID:
+   - **Description**: Enter a description (e.g., "Asgardeo Authenticator")
+   - **Bundle ID**: Enter your Bundle ID (e.g., `com.yourcompany.authenticator`)
+   - **Capabilities**: Check **Push Notifications**
+7. Click **Continue** > **Register**
+
+> [!TIP]
+> Official Guide: [Register an App ID](https://developer.apple.com/help/account/manage-identifiers/register-an-app-id/)
+
+##### Step 2: Register Your Device
+
+1. In Apple Developer Portal, go to **Devices**
+2. Click **+** (Add button)
+3. Enter **Device Name** and **Device UDID**
+   - To find UDID: Connect device > Open Finder/iTunes > Click on device > Click on serial number to reveal UDID
+4. Click **Continue** > **Register**
+
+> [!TIP]
+> Official Guide: [Register a Device](https://developer.apple.com/help/account/register-devices/register-a-single-device/)
+
+##### Step 3: Create Provisioning Profile
+
+1. In Apple Developer Portal, go to **Profiles**
+2. Click **+** (Add button)
+3. Select **iOS App Development** > **Continue**
+4. Select your **App ID** > **Continue**
+5. Select your **Certificate** > **Continue**
+6. Select your **Devices** > **Continue**
+7. Enter **Provisioning Profile Name** > **Generate**
+8. **Download** the provisioning profile (`.mobileprovision` file)
+9. **Install** the provisioning profile on your Mac:
+   - Double-click the downloaded `.mobileprovision` file, or
+   - Drag and drop it into Xcode, or
+   - Use the command line:
+     ```bash
+     open ~/Downloads/YourProfile.mobileprovision
+     ```
+
+> [!TIP]
+> Official Guide: [Create a Provisioning Profile](https://developer.apple.com/help/account/manage-profiles/create-a-development-provisioning-profile/)
+
+##### Step 4: Generate APNs Authentication Key
+
+This key is needed for Firebase Cloud Messaging to send push notifications to iOS devices.
+
+1. In Apple Developer Portal, go to **Keys**
+2. Click **+** (Add button)
+3. Enter **Key Name** (e.g., "FCM Push Notifications")
+4. Check **Apple Push Notifications service (APNs)**
+5. Click **Continue** > **Register**
+6. **Download** the `.p8` key file (you can only download it once!)
+7. Note down the **Key ID** and **Team ID** (found in top-right corner)
+
+> [!TIP]
+> Official Guide: [Create APNs Authentication Key](https://developer.apple.com/help/account/manage-keys/create-api-keys-for-app-services/)
+
+##### Step 5: Upload APNs Key to Firebase
+
+1. Go back to [Firebase Console](#step-4-upload-apns-authentication-key-to-firebase)
+2. Upload the `.p8` file along with **Key ID** and **Team ID**
+
+> [!IMPORTANT]
+> Keep your `.p8` file secure! You cannot download it again from Apple Developer Portal.
+
 ### ▶️ Run on Device
 
 Choose your platform to get started:
@@ -105,143 +268,3 @@ npx expo run:android
 # Run the application on your iOS device
 npx expo run:ios --device
 ```
-
-### �📱 Push Notifications Setup
-
-Push notifications are essential for the authenticator app functionality. Follow these steps carefully:
-
-#### 🔥 Firebase Cloud Messaging (FCM) Configuration
-
-> 📚 **Official Guide**: Follow the [Firebase Console Setup Guide](https://firebase.google.com/docs/cloud-messaging) for detailed instructions.
-
-1. **Create Firebase Project**
-   - Go to [Firebase Console](https://console.firebase.google.com/)
-   - Create a new project or use existing one
-   - Enable Cloud Messaging API
-
-2. **Android Configuration**
-   ```bash
-   # Download google-services.json from Firebase Console
-   # Place it in: ./config/google-services.json
-   ```
-   
-   > 📖 **Detailed Setup**: [Firebase Android Setup Guide](https://firebase.google.com/docs/android/setup)
-
-3. **iOS Configuration**
-   ```bash
-   # Download GoogleService-Info.plist from Firebase Console
-   # Place it in: ./config/GoogleService-Info.plist
-   ```
-   
-   > 📖 **Detailed Setup**: [Firebase iOS Setup Guide](https://firebase.google.com/docs/ios/setup)
-
-#### 🍎 Apple Push Notification (APN) Setup
-
-> 📚 **Official Guide**: [Firebase Cloud Messaging for iOS](https://firebase.google.com/docs/cloud-messaging/ios/client)
-
-1. **Apple Developer Account Setup**
-   - Create/use existing Apple Developer account
-   - Generate APNs Authentication Key or Certificate
-   - Upload to Firebase Console under Project Settings > Cloud Messaging
-
-2. **iOS Bundle ID Configuration**
-   - Ensure your app's bundle ID matches Firebase configuration
-   - Enable Push Notifications capability in Xcode
-
-#### 📁 Configuration Files Structure
-
-Ensure your config directory looks like this:
-```
-config/
-├── app.config.json          # App configuration
-├── google-services.json     # 🔥 Firebase Android config
-└── GoogleService-Info.plist # 🔥 Firebase iOS config
-```
-
-> ⚠️ **Security Note**: Never commit these files to public repositories. Add them to `.gitignore` for production apps.
-
-### 🏃‍♂️ Running the Application
-
-#### For Android Device
-
-1. **Enable Developer Options**
-   - Go to Settings > About Phone > Tap Build Number 7 times
-   - Enable "USB Debugging" in Developer Options
-
-2. **Connect Device and Start**
-   ```bash
-   # Ensure device is connected via USB or same WiFi network
-   npx expo start --android
-   
-   # For development build
-   npx expo run:android --device
-   ```
-
-3. **Install Expo Go (Alternative)**
-   - Install [Expo Go](https://play.google.com/store/apps/details?id=host.exp.exponent) from Play Store
-   - Scan QR code from terminal
-
-#### For iOS Device
-
-1. **Trust Developer Certificate**
-   - Connect iPhone via USB
-   - Trust your computer when prompted
-
-2. **Start Development Server**
-   ```bash
-   # Ensure device is connected via USB or same WiFi network
-   npx expo start --ios
-   
-   # For development build
-   npx expo run:ios --device
-   ```
-
-3. **Install Expo Go (Alternative)**
-   - Install [Expo Go](https://apps.apple.com/app/expo-go/id982107779) from App Store
-   - Scan QR code from terminal or use AirDrop
-
-### 🌐 Network Requirements
-
-> 🔗 **Same Network**: Your development machine and mobile device must be on the same local network for Expo development server to work properly.
-
-**Troubleshooting Network Issues:**
-```bash
-# Check your local IP
-npx expo start --tunnel  # Use tunnel if local network fails
-
-# Alternative: Use ngrok for tunneling
-npm install -g @expo/ngrok
-npx expo start --tunnel
-```
-
-### 🔐 Authentication Setup
-
-1. **Configure Asgardeo Connection**
-   - Update `config/app.config.json` with your Asgardeo tenant details
-   - Ensure proper redirect URLs are configured in Asgardeo console
-
-2. **Test Push Notifications**
-   - Complete a test authentication flow
-   - Verify push notifications are received on physical device
-
-### ✅ Verification Steps
-
-1. **App Launches Successfully** ✓
-2. **Push Notifications Work** ✓ (only on physical devices)
-3. **TOTP Generation Functions** ✓
-4. **QR Code Scanning Works** ✓
-5. **Biometric Authentication** ✓ (device dependent)
-
-### 🆘 Troubleshooting
-
-**Common Issues:**
-
-- **Push notifications not working**: Verify FCM configuration and use physical device
-- **Network connection failed**: Ensure same network and try tunnel mode
-- **Build failures**: Check node version and clear cache: `npx expo start --clear`
-- **iOS certificate issues**: Verify Apple Developer account and provisioning profiles
-
-**Get Help:**
-- 📖 [Expo Documentation](https://docs.expo.dev/)
-- 🔥 [Firebase Documentation](https://firebase.google.com/docs)
-- 🛡️ [Asgardeo Documentation](https://wso2.com/asgardeo/docs/)
