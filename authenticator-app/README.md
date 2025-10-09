@@ -51,7 +51,7 @@ Get your Asgardeo Authenticator App up and running in minutes!
 > [!IMPORTANT]
 > Use physical devices instead of emulators for testing push notifications. Emulators may not properly handle FCM push messages and biometric authentication.
 
-### � Tested Platform Versions
+### 🧪 Tested Platform Versions
 
 This application has been tested on the following platform versions:
 
@@ -62,7 +62,7 @@ This application has been tested on the following platform versions:
 
 ### 📋 Prerequisites
 
-- **Node.js** (version 18 or higher)
+- **Node.js** (version 22 or higher)
 - **Expo CLI** (`npm install -g @expo/cli`)
 - **Physical iOS/Android device** (recommended for push notifications)
 - **Same Network**: Ensure your development machine and mobile device are on the same network
@@ -71,12 +71,39 @@ This application has been tested on the following platform versions:
 
 1. **Clone and Install Dependencies**
    ```bash
-   git clone https://github.com/DilshanSenarath/asgardeo-react-native-samples.git
+   git clone https://github.com/asgardeo-samples/asgardeo-react-native-samples.git
    cd asgardeo-react-native-samples/authenticator-app
    npm install
    ```
 
-### 📱 Push Notifications Setup
+### ▶️ Run on Device
+
+Choose your platform to get started:
+
+- 🤖 [Android](#-android-device-setup)
+- 🍎 [iOS](#-ios-device-setup)
+
+#### 🤖 Android Device Setup
+
+> 📚 **Official Guide**: Follow the [Expo Android Device Setup Guide](https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&buildEnv=local&platform=android) for detailed instructions on setting up your Android device for development.
+
+**Quick Start:**
+```bash
+# Run the application on your Android device
+npx expo run:android
+```
+
+#### 🍎 iOS Device Setup
+
+> 📚 **Official Guide**: Follow the [Expo iOS Device Setup Guide](https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&buildEnv=local&platform=ios&device=physical) for detailed instructions on setting up your iOS device for development.
+
+**Quick Start:**
+```bash
+# Run the application on your iOS device
+npx expo run:ios --device
+```
+
+### �📱 Push Notifications Setup
 
 Push notifications are essential for the authenticator app functionality. Follow these steps carefully:
 
