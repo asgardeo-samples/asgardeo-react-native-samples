@@ -23,7 +23,7 @@ import { AccountInterface } from "../../models/storage";
 import AsyncStorageService from "../../utils/AsyncStorageService";
 import StorageConstants from "../../constants/StorageConstants";
 import CryptoService from "../../utils/CryptoService";
-import TypeConvert from "../../utils/TyperConvert";
+import TypeConvert from "../../utils/TypeConvert";
 import SecureStorageService from "../../utils/SecureStorageService";
 import useAccount from "../account/useAccount";
 

@@ -141,35 +141,37 @@ const AppNotification: FunctionComponent<PushAuthenticationDataInterface> = ({
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        {!numberChallenge && (
-          <TouchableOpacity
-            style={styles.approveButton}
-            onPress={() => handleUserResponse(PushAuthResponseStatus.APPROVED)}
-          >
-            <Text style={styles.approveButtonText}>Approve</Text>
-          </TouchableOpacity>
-        )}
-        {numberChallenge && threeNumbers?.map((number, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.numberBox}
-            onPress={
-              number === parseInt(numberChallenge)
-                ? () => handleUserResponse(PushAuthResponseStatus.APPROVED)
-                : () => handleUserResponse(PushAuthResponseStatus.DENIED)
-            }
-          >
-            <Text style={styles.numberText}>
-              {
-                number === parseInt(numberChallenge) && numberChallenge.length === 1
-                  ? `0${number}`
-                  : number
+        <View style={[styles.approveButtonContainer]}>
+          {!numberChallenge && (
+            <TouchableOpacity
+              style={styles.approveButton}
+              onPress={() => handleUserResponse(PushAuthResponseStatus.APPROVED)}
+            >
+              <Text style={styles.approveButtonText}>Approve</Text>
+            </TouchableOpacity>
+          )}
+          {numberChallenge && threeNumbers?.map((number, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.numberBox}
+              onPress={
+                number === parseInt(numberChallenge)
+                  ? () => handleUserResponse(PushAuthResponseStatus.APPROVED)
+                  : () => handleUserResponse(PushAuthResponseStatus.DENIED)
               }
-            </Text>
-          </TouchableOpacity>
-        ))}
+            >
+              <Text style={styles.numberText}>
+                {
+                  number === parseInt(numberChallenge) && numberChallenge.length === 1
+                    ? `0${number}`
+                    : number
+                }
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
         <TouchableOpacity
-          style={numberChallenge ? [styles.denyButton, styles.smallDenyButton] : [styles.denyButton, styles.largeDenyButton]}
+          style={[styles.denyButton]}
           onPress={() => handleUserResponse(PushAuthResponseStatus.DENIED)}
         >
           <Text style={styles.denyButtonText}>Deny</Text>
@@ -251,51 +253,51 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   numberBox: {
-    flex: 1,
-    backgroundColor: theme.colors.button.success.background,
-    paddingVertical: 10,
+    backgroundColor: theme.colors.button.primary.background,
+    width: 70,
+    height: 70,
+    paddingVertical: 20,
     paddingHorizontal: 20,
-    borderRadius: 8
+    borderRadius: '50%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   numberText: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '600',
-    color: theme.colors.button.success.text,
+    color: theme.colors.button.primary.text,
     textAlign: 'center'
   },
   buttonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     gap: 8
+  },
+  approveButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    gap: 8,
+    marginBottom: 8
   },
   approveButton: {
     flex: 1,
-    backgroundColor: theme.colors.button.success.background,
+    backgroundColor: theme.colors.button.primary.background,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8
   },
   approveButtonText: {
-    color: theme.colors.button.success.text,
+    color: theme.colors.button.primary.text,
     fontSize: 16,
     fontWeight: '600',
     textAlign: 'center'
   },
   denyButton: {
-    backgroundColor: theme.colors.button.danger.background,
+    backgroundColor: theme.colors.button.secondary.background,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8
   },
-  largeDenyButton: {
-    flex: 1
-  },
-  smallDenyButton: {
-    flexShrink: 1
-  },
   denyButtonText: {
-    color: theme.colors.button.danger.text,
+    color: theme.colors.button.secondary.text,
     fontSize: 16,
     fontWeight: '600',
     textAlign: 'center'

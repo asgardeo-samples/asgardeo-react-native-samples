@@ -21,6 +21,10 @@ import { ThemeConfigs } from "../../models/ui";
 import { HeaderTitleProps } from "@react-navigation/elements";
 import { ReactElement } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import rawConfig from "../../../config/app.config.json";
+import { DeploymentConfig } from "../../models/core";
+
+const config: DeploymentConfig = rawConfig as DeploymentConfig;
 
 const theme: ThemeConfigs = Theme.getInstance().getConfigs();
 
@@ -34,10 +38,10 @@ const HeaderTitle = (_props: HeaderTitleProps): ReactElement => {
   return (
     <View style={[styles.appTitleContainer]}>
       <Image
-        source={require('../../../assets/images/full-logo.png')}
+        source={require('../../../assets/images/logo.png')}
         style={styles.appLogo}
       />
-      <Text style={[styles.appName]}>Authenticator</Text>
+      <Text style={[styles.appName]}>{config.appHeaderText}</Text>
     </View>
   );
 };
@@ -48,7 +52,7 @@ const HeaderTitle = (_props: HeaderTitleProps): ReactElement => {
 const styles = StyleSheet.create({
   appTitleContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'flex-start',
     gap: 8
   },

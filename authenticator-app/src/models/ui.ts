@@ -73,14 +73,6 @@ export interface ThemeConfigs {
       secondary: {
         background: string;
         text: string;
-      },
-      success: {
-        background: string;
-        text: string;
-      },
-      danger: {
-        background: string;
-        text: string;
       }
     },
     typography: {

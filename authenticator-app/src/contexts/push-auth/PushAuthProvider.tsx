@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import TypeConvert from "../../utils/TyperConvert";
+import TypeConvert from "../../utils/TypeConvert";
 import { Router, useRouter } from "expo-router";
 import { FunctionComponent, PropsWithChildren, ReactElement, useCallback, useEffect, useState } from "react";
 import AlertWidget, { AlertType } from "../../components/common/AlertWidget";

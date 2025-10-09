@@ -19,7 +19,7 @@
 import StorageConstants from "../../constants/StorageConstants";
 import { AccountInterface, StorageDataInterface } from "../../models/storage";
 import AsyncStorageService from "../../utils/AsyncStorageService";
-import TypeConvert from "../../utils/TyperConvert";
+import TypeConvert from "../../utils/TypeConvert";
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import { setStringAsync } from 'expo-clipboard';
 import React, { FunctionComponent, ReactElement, RefObject, useCallback, useEffect, useRef, useState } from "react";

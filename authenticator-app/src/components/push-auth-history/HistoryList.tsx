@@ -21,7 +21,7 @@ import { PushAuthenticationDataStorageInterface, StorageDataInterface } from "..
 import { FunctionComponent, useCallback, useState } from "react";
 import AsyncStorageService from "../../utils/AsyncStorageService";
 import StorageConstants from "../../constants/StorageConstants";
-import TypeConvert from "../../utils/TyperConvert";
+import TypeConvert from "../../utils/TypeConvert";
 import { ScrollView, StyleSheet, View, Text, ViewStyle } from "react-native";
 import HistoryCard from "./HistoryCard";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
