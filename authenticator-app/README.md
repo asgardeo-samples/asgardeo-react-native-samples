@@ -69,7 +69,8 @@ This application has been tested on the following platform versions:
 
 ### 🔧 Initial Setup
 
-1. **Clone and Install Dependencies**
+**Clone and Install Dependencies**
+
    ```bash
    git clone https://github.com/asgardeo-samples/asgardeo-react-native-samples.git
    cd asgardeo-react-native-samples/authenticator-app
@@ -85,7 +86,8 @@ Choose your platform to get started:
 
 #### 🤖 Android Device Setup
 
-> 📚 **Official Guide**: Follow the [Expo Android Device Setup Guide](https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&buildEnv=local&platform=android) for detailed instructions on setting up your Android device for development.
+> [!TIP]
+> Follow the [Expo Android Device Setup Guide](https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&buildEnv=local&platform=android) for detailed instructions on setting up your Android device for development.
 
 **Quick Start:**
 ```bash
@@ -95,7 +97,8 @@ npx expo run:android
 
 #### 🍎 iOS Device Setup
 
-> 📚 **Official Guide**: Follow the [Expo iOS Device Setup Guide](https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&buildEnv=local&platform=ios&device=physical) for detailed instructions on setting up your iOS device for development.
+> [!TIP]
+> Follow the [Expo iOS Device Setup Guide](https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&buildEnv=local&platform=ios&device=physical) for detailed instructions on setting up your iOS device for development.
 
 **Quick Start:**
 ```bash
