@@ -53,7 +53,7 @@ class Theme {
       userPreference = activeTheme;
     }
 
-    this.configs = config.ui.theme[userPreference];
+    this.configs = config.ui.theme[userPreference] ?? config.ui.theme[activeTheme];
   }
 
   /**
