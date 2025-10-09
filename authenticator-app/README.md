@@ -278,6 +278,11 @@ npx expo run:android
 npx expo run:ios --device
 ```
 
+### 🏆 Production Build
+
+> [!TIP]
+> Follow the [Expo Guide](https://docs.expo.dev/deploy/build-project/) for detailed instructions on setting up your production build.
+
 ---
 
 ## 🏗️ Architecture
