@@ -145,6 +145,7 @@ class MessagingService {
     return onNotificationOpenedApp(messagingInstance, (message: FirebaseMessagingTypes.RemoteMessage) => {
       const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayload(message);
       if (pushData) {
+        clearLastNotificationResponse();
         callback(pushData);
       }
     });

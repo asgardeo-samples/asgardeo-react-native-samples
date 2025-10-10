@@ -1,5 +1,42 @@
 # 📋 Asgardeo Authenticator - Codebase Documentation
 
+## 📑 Table of Contents
+
+- [Technology Stack](#-technology-stack)
+- [Package Dependencies & Usage](#-package-dependencies--usage)
+  - [Core React Native & Expo Packages](#core-react-native--expo-packages)
+  - [Authentication & Security Packages](#authentication--security-packages)
+  - [Storage Packages](#storage-packages)
+  - [Firebase & Push Notifications](#firebase--push-notifications)
+  - [Camera & QR Scanning](#camera--qr-scanning)
+  - [UI & Navigation Packages](#ui--navigation-packages)
+  - [Utility Packages](#utility-packages)
+- [Directory Structure & Architecture](#-directory-structure--architecture)
+  - [Root Level Files](#root-level-files)
+    - [Configuration Files](#configuration-files)
+  - [`app/` Directory - Expo Router Pages](#app-directory---expo-router-pages)
+  - [`src/` Directory - Core Application Logic](#src-directory---core-application-logic)
+    - [`src/components/` - UI Components](#srccomponents---ui-components)
+    - [`src/contexts/` - State Management](#srccontexts---state-management)
+    - [`src/models/` - TypeScript Interfaces](#srcmodels---typescript-interfaces)
+    - [`src/utils/` - Utility Services](#srcutils---utility-services)
+    - [`src/constants/` - Application Constants](#srcconstants---application-constants)
+  - [`assets/` Directory](#assets-directory)
+  - [`config/` Directory](#config-directory)
+  - [`docs/` Directory](#docs-directory)
+- [Application Flow & Architecture](#-application-flow--architecture)
+  - [Context Provider Hierarchy](#context-provider-hierarchy)
+  - [Data Flow](#data-flow)
+  - [Storage Architecture](#storage-architecture)
+  - [Security Layers](#security-layers)
+- [Key Features Implementation](#-key-features-implementation)
+  - [TOTP (Time-based One-Time Password)](#totp-time-based-one-time-password)
+  - [Push Authentication](#push-authentication)
+  - [QR Code Scanning](#qr-code-scanning)
+  - [Security Features](#security-features)
+
+---
+
 ## 🧑‍💻 Technology Stack
 
 - **Framework**: React Native 0.79.6 with Expo ~53.0.22

@@ -4,16 +4,46 @@ This guide explains how to configure and customize the Authenticator App for you
 
 ---
 
-## Table of Contents
+## 📑 Table of Contents
 
-1. [Application Configuration (`app.config.json`)](#application-configuration-appconfigjson)
-2. [Expo Configuration (`app.json`)](#expo-configuration-appjson)
-3. [Splash Screen Configuration](#splash-screen-configuration)
-4. [Logo and Branding Assets](#logo-and-branding-assets)
+- [Application Configuration (`app.config.json`)](#-application-configuration-appconfigjson)
+  - [Configuration Structure](#configuration-structure)
+    - [1. App Header Text](#1-app-header-text)
+    - [2. Development Mode](#2-development-mode)
+    - [3. Security Settings](#3-security-settings)
+    - [4. Feature Configuration](#4-feature-configuration)
+    - [5. UI Theme Configuration](#5-ui-theme-configuration)
+      - [Theme Properties](#theme-properties)
+      - [Color Customization](#color-customization)
+        - [Screen Colors](#screen-colors)
+        - [Overlay Colors](#overlay-colors)
+        - [Header Colors](#header-colors)
+        - [Button Colors](#button-colors)
+        - [Typography Colors](#typography-colors)
+        - [Card Colors](#card-colors)
+        - [Alert Colors](#alert-colors)
+        - [Code Circle Colors](#code-circle-colors)
+        - [Avatar Random Color Palette](#avatar-random-color-palette)
+  - [Customization Example](#customization-example)
+- [Expo Configuration (`app.json`)](#-expo-configuration-appjson)
+  - [Key Configuration Options](#key-configuration-options)
+    - [1. App Identity](#1-app-identity)
+    - [2. App Icon](#2-app-icon)
+    - [3. iOS Configuration](#3-ios-configuration)
+    - [4. Android Configuration](#4-android-configuration)
+  - [Branding Customization in `app.json`](#branding-customization-in-appjson)
+- [Splash Screen Configuration](#-splash-screen-configuration)
+  - [Current Splash Screen Configuration](#current-splash-screen-configuration)
+  - [Configuration Properties](#configuration-properties)
+  - [Theming Limitations](#theming-limitations)
+  - [Recommended Approach](#recommended-approach)
+- [Logo and Branding Assets](#-logo-and-branding-assets)
+  - [Available Logo Assets](#available-logo-assets)
+  - [Logo Replacement](#logo-replacement)
 
 ---
 
-## Application Configuration (`app.config.json`)
+## 🔧 Application Configuration (`app.config.json`)
 
 The `config/app.config.json` file contains the core application settings, including UI theming, security options, and feature configurations.
 
@@ -38,6 +68,28 @@ The `config/app.config.json` file contains the core application settings, includ
 
 > [!IMPORTANT]
 > Disable dev mode in production builds
+
+> [!IMPORTANT]
+> **Local Identity Server Setup**: When running the Identity Server locally and accessing it from a mobile device on the same network, you'll encounter HTTPS certificate issues due to self-signed certificates. To resolve this:
+> 
+> 1. **Add HTTP Connector**: Configure an HTTP connector in your WSO2 Identity Server by adding the following to `catalina-server.xml.j2`:
+>    ```xml
+>    <Connector port="8082" protocol="HTTP/1.1"
+>               connectionTimeout="20000"
+>               redirectPort="8443" />
+>    ```
+> 
+> 2. **File Location**: 
+>    ```
+>    {IS_HOME}/repository/resources/conf/templates/repository/conf/tomcat/catalina-server.xml.j2
+>    ```
+> 
+> 3. **Update Configuration**: Set your `host` to use HTTP with the new port:
+>    ```json
+>    "host": "http://192.168.1.100:8082"
+>    ```
+> 
+> This allows the mobile app to communicate with the Identity Server over HTTP, bypassing certificate validation issues during development.
 
 #### 3. **Security Settings**
 ```json
@@ -245,7 +297,7 @@ To brand the app for your organization:
 
 ---
 
-## Expo Configuration (`app.json`)
+## 📱 Expo Configuration (`app.json`)
 
 The `app.json` file contains Expo-specific configurations for building and deploying the app on iOS and Android platforms.
 
@@ -319,7 +371,7 @@ To rebrand the app:
 
 ---
 
-## Splash Screen Configuration
+## 🚀 Splash Screen Configuration
 
 The splash screen is the initial screen displayed when the app launches, providing a seamless transition while the app loads. This configuration is managed through the `app.json` file.
 
@@ -359,7 +411,7 @@ Due to the theming limitations, it's recommended to use:
 
 ---
 
-## Logo and Branding Assets
+## 🎨 Logo and Branding Assets
 
 This section covers how to customize the application's visual branding by replacing the default logo assets with your organization's branding elements.
 
