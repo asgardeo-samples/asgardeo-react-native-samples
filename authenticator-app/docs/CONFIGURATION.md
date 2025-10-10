@@ -67,9 +67,6 @@ The `config/app.config.json` file contains the core application settings, includ
 - `host`: Development server URL for testing
 
 > [!IMPORTANT]
-> Disable dev mode in production builds
-
-> [!IMPORTANT]
 > **Local Identity Server Setup**: When running the Identity Server locally and accessing it from a mobile device on the same network, you'll encounter HTTPS certificate issues due to self-signed certificates. To resolve this:
 > 
 > 1. **Add HTTP Connector**: Configure an HTTP connector in your WSO2 Identity Server by adding the following to `catalina-server.xml.j2`:
@@ -90,6 +87,9 @@ The `config/app.config.json` file contains the core application settings, includ
 >    ```
 > 
 > This allows the mobile app to communicate with the Identity Server over HTTP, bypassing certificate validation issues during development.
+
+> [!WARNING]
+> Disable dev mode in production builds
 
 #### 3. **Security Settings**
 ```json
