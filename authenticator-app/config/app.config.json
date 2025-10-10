@@ -1,11 +1,11 @@
 {
   "appHeaderText": "Authenticator",
   "devMode": {
-    "enabled": true,
-    "host": "http://10.10.16.152:8082"
+    "enabled": false,
+    "host": ""
   },
   "security": {
-    "enableAppScreenLocks": true
+    "enableAppScreenLocks": false
   },
   "feature": {
     "push": {
