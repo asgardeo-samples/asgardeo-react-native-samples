@@ -91,6 +91,19 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
   }, [setPushAuthMessageCache]);
 
   /**
+   * Removes a push authentication message from the cache by its ID.
+   *
+   * @param id - The unique identifier for the push authentication message to be removed.
+   */
+  const removeCacheById = useCallback((id: string): void => {
+    setPushAuthMessageCache((prevCache) => {
+      const newCache = { ...prevCache };
+      delete newCache[id];
+      return newCache;
+    });
+  }, [setPushAuthMessageCache]);
+
+  /**
    * Handles push authentication notifications.
    *
    * @param data - The push authentication data received from the notification.
@@ -477,7 +490,8 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
         getPushAuthMessageFromCache,
         sentPushAuthResponse,
         registerPushDevice,
-        unregisterPushDevice
+        unregisterPushDevice,
+        removePushAuthMessageFromCache: removeCacheById
       }}
     >
       {children}

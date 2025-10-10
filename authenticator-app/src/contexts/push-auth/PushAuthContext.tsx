@@ -57,6 +57,12 @@ export interface PushAuthContextInterface {
    * @returns A promise that resolves when the unregistration is complete.
    */
   unregisterPushDevice: (id: string) => Promise<void>;
+  /**
+   * Removes a push authentication message from the cache by its ID.
+   * 
+   * @param id - The unique identifier for the push authentication message to be removed.
+   */
+  removePushAuthMessageFromCache: (id: string) => void;
 }
 
 /**
@@ -67,7 +73,8 @@ const PushAuthContext: Context<PushAuthContextInterface> = createContext<PushAut
   getPushAuthMessageFromCache: () => undefined,
   sentPushAuthResponse: async () => { },
   registerPushDevice: async () => "",
-  unregisterPushDevice: async () => { }
+  unregisterPushDevice: async () => { },
+  removePushAuthMessageFromCache: () => { }
 });
 
 export default PushAuthContext;

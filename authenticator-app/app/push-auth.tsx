@@ -36,8 +36,19 @@ const theme: ThemeConfigs = Theme.getInstance().getConfigs();
 const PushAuthScreen: FunctionComponent = (): ReactElement | null => {
   const router: Router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getPushAuthMessageFromCache } = usePushAuth();
+  const { getPushAuthMessageFromCache, removePushAuthMessageFromCache } = usePushAuth();
   const insets: EdgeInsets = useSafeAreaInsets();
+
+  /**
+   * Cleanup the push authentication message from the cache when the component is unmounted.
+   */
+  useEffect(() => {
+    if (!id || !removePushAuthMessageFromCache) {
+      return;
+    }
+
+    return () => removePushAuthMessageFromCache(id);
+  }, [id, removePushAuthMessageFromCache]);
 
   /**
    * Push authentication data retrieved from the cache.
