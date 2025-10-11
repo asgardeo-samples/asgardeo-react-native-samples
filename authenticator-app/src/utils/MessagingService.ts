@@ -111,6 +111,7 @@ class MessagingService {
     return addNotificationResponseReceivedListener((message: NotificationResponse) => {
       const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayload(message.notification);
       if (pushData) {
+        clearLastNotificationResponse();
         callback(pushData);
       }
     });
