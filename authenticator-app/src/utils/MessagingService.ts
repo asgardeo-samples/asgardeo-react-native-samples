@@ -16,19 +16,19 @@
  * under the License.
  */
 
+import messaging, {
+  FirebaseMessagingTypes,
+  getToken,
+  onMessage,
+  requestPermission,
+  onNotificationOpenedApp,
+  getInitialNotification
+} from '@react-native-firebase/messaging';
 import { PushAuthenticationDataInterface } from '../models/push-notification';
-import { 
-  NotificationResponse, 
-  getDevicePushTokenAsync, 
-  requestPermissionsAsync, 
-  DevicePushToken, 
-  addNotificationReceivedListener, 
-  EventSubscription, 
-  Notification, 
-  addNotificationResponseReceivedListener, 
-  getLastNotificationResponse,
-  clearLastNotificationResponse
-} from "expo-notifications";
+import { PermissionsAndroid, Platform } from 'react-native';
+import { getLastNotificationResponse, NotificationResponse, clearLastNotificationResponse } from "expo-notifications";
+
+const messagingInstance: FirebaseMessagingTypes.Module = messaging();
 
 /**
  * Class containing messaging service utility methods.
@@ -38,7 +38,11 @@ class MessagingService {
    * Requests user permissions to display offline notifications.
    */
   static async requestUserPermission(): Promise<void> {
-    await requestPermissionsAsync();
+    if (Platform.OS === 'ios') {
+      await requestPermission(messagingInstance);
+    } else if (Platform.OS === 'android') {
+      await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+    }
   }
 
   /**
@@ -47,40 +51,70 @@ class MessagingService {
    * @returns The FCM token for the device.
    */
   static async generateFCMToken(): Promise<string> {
-    const token: DevicePushToken =  await getDevicePushTokenAsync();
+    return getToken(messagingInstance);
+  }
 
-    return token.data;
+  /**
+   * Creates a push authentication data payload from the received message.
+   *
+   * @param message - The received remote message.
+   * @returns The push authentication data payload or null if the message is invalid.
+   */
+  private static createPushDataPayload(
+    message: FirebaseMessagingTypes.RemoteMessage
+  ): PushAuthenticationDataInterface | null {
+    if (!message.data?.pushId) {
+      return null;
+    }
+
+    return {
+      username: message.data.username as string,
+      tenantDomain: message.data.tenantDomain as string,
+      organizationId: message.data.organizationId as string,
+      organizationName: message.data.organizationName as string,
+      userStoreDomain: message.data.userStoreDomain as string,
+      deviceId: message.data.deviceId as string,
+      applicationName: message.data.applicationName as string,
+      notificationScenario: message.data.notificationScenario as string,
+      pushId: message.data.pushId as string,
+      challenge: message.data.challenge as string,
+      numberChallenge: message.data.numberChallenge as string,
+      ipAddress: message.data.ipAddress as string,
+      deviceOS: message.data.deviceOS as string,
+      browser: message.data.browser as string,
+      sentTime: message.sentTime as number
+    };
   }
 
   /**
    * Creates a push authentication data payload from the notification response.
    *
-   * @param message - The notification response from Expo.
+   * @param response - The notification response from Expo.
    * @returns The push authentication data payload or null if the response is invalid.
    */
-  static createPushDataPayload(
-    message: Notification
+  static createPushDataPayloadFromExpo(
+    response: NotificationResponse
   ): PushAuthenticationDataInterface | null {
-    if (!message?.request?.content?.data?.pushId) {
+    if (!response?.notification?.request?.content?.data?.pushId) {
       return null;
     }
 
     return {
-      username: message.request.content.data.username as string,
-      tenantDomain: message.request.content.data.tenantDomain as string,
-      organizationId: message.request.content.data.organizationId as string,
-      organizationName: message.request.content.data.organizationName as string,
-      userStoreDomain: message.request.content.data.userStoreDomain as string,
-      deviceId: message.request.content.data.deviceId as string,
-      applicationName: message.request.content.data.applicationName as string,
-      notificationScenario: message.request.content.data.notificationScenario as string,
-      pushId: message.request.content.data.pushId as string,
-      challenge: message.request.content.data.challenge as string,
-      numberChallenge: message.request.content.data.numberChallenge as string,
-      ipAddress: message.request.content.data.ipAddress as string,
-      deviceOS: message.request.content.data.deviceOS as string,
-      browser: message.request.content.data.browser as string,
-      sentTime: message.date as number
+      username: response.notification.request.content.data.username as string,
+      tenantDomain: response.notification.request.content.data.tenantDomain as string,
+      organizationId: response.notification.request.content.data.organizationId as string,
+      organizationName: response.notification.request.content.data.organizationName as string,
+      userStoreDomain: response.notification.request.content.data.userStoreDomain as string,
+      deviceId: response.notification.request.content.data.deviceId as string,
+      applicationName: response.notification.request.content.data.applicationName as string,
+      notificationScenario: response.notification.request.content.data.notificationScenario as string,
+      pushId: response.notification.request.content.data.pushId as string,
+      challenge: response.notification.request.content.data.challenge as string,
+      numberChallenge: response.notification.request.content.data.numberChallenge as string,
+      ipAddress: response.notification.request.content.data.ipAddress as string,
+      deviceOS: response.notification.request.content.data.deviceOS as string,
+      browser: response.notification.request.content.data.browser as string,
+      sentTime: response.notification.date as number
     };
   }
 
@@ -90,8 +124,8 @@ class MessagingService {
    * @param router - The router instance to navigate on message receipt.
    * @returns A function to unsubscribe from in-app message listener.
    */
-  static listenForInAppMessages(callback: (data: PushAuthenticationDataInterface) => void): EventSubscription {
-    return addNotificationReceivedListener((message: Notification) => {
+  static listenForInAppMessages(callback: (data: PushAuthenticationDataInterface) => void): () => void {
+    return onMessage(messagingInstance, (message: FirebaseMessagingTypes.RemoteMessage) => {
       const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayload(message);
       if (pushData) {
         callback(pushData);
@@ -107,41 +141,54 @@ class MessagingService {
    */
   static listenForNotificationOpenWhenAppInBackground(
     callback: (data: PushAuthenticationDataInterface) => void
-  ): EventSubscription {
-    return addNotificationResponseReceivedListener((message: NotificationResponse) => {
-      const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayload(message.notification);
+  ): () => void {
+    return onNotificationOpenedApp(messagingInstance, (message: FirebaseMessagingTypes.RemoteMessage) => {
+      const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayload(message);
       if (pushData) {
-        clearLastNotificationResponse();
         callback(pushData);
       }
     });
   }
 
   /**
-   * Listens for notification opens when the app is closed.
-   * 
+   * Sets up a listener for when the app is closed.
+   *
    * @param callback - The callback to execute on notification open.
    */
-  static listenForNotificationOpenWhenAppIsClosed(
-    callback: (data: PushAuthenticationDataInterface) => void
-  ): void {
+  static listenForNotificationOpenWhenAppIsClosedExpo(callback: (data: PushAuthenticationDataInterface) => void): void {
     const response: NotificationResponse | null = getLastNotificationResponse();
     if (response) {
-      const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayload(response.notification);
+      const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayloadFromExpo(response);
       if (pushData) {
-        clearLastNotificationResponse();
         callback(pushData);
       }
     }
   }
 
   /**
-   * Removes a notification listener subscription.
+   * Sets up a listener for when the app is closed using FCM.
    *
-   * @param subscription - The event subscription to remove.
+   * @param callback - The callback to execute on notification open.
    */
-  static removeNotificationListeners(subscription: EventSubscription): void {
-    subscription.remove();
+  static listenForNotificationWhenAppIsClosedFCM(callback: (data: PushAuthenticationDataInterface) => void): void {
+    getInitialNotification(messagingInstance)
+      .then((message: FirebaseMessagingTypes.RemoteMessage | null) => {
+        if (message) {
+          const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayload(message);
+          if (pushData) {
+            callback(pushData);
+          }
+        }
+      });
+  }
+
+  /**
+   * Clears the stored notification response data.
+   * 
+   * This can be used to prevent processing the same notification multiple times.
+   */
+  static clearNotificationData(): void {
+    clearLastNotificationResponse();
   }
 }
 

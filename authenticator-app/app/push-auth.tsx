@@ -25,6 +25,7 @@ import AppNotification from "../src/components/push-auth/AppNotification";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeConfigs } from "../src/models/ui";
 import Theme from "../src/utils/Theme";
+import MessagingService from "../src/utils/MessagingService";
 
 const theme: ThemeConfigs = Theme.getInstance().getConfigs();
 
@@ -47,7 +48,10 @@ const PushAuthScreen: FunctionComponent = (): ReactElement | null => {
       return;
     }
 
-    return () => removePushAuthMessageFromCache(id);
+    return () => {
+      removePushAuthMessageFromCache(id);
+      MessagingService.clearNotificationData();
+    };
   }, [id, removePushAuthMessageFromCache]);
 
   /**

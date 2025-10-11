@@ -124,28 +124,41 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
   }, []);
 
   /**
+   * Sets up a listener for when the app is in the foreground.
+   */
+  useEffect(() => {
+    const unsubscribe: () => void = MessagingService.listenForInAppMessages(handlePushAuthNotification);
+
+    return unsubscribe;
+  }, [handlePushAuthNotification]);
+
+  /**
+   * Request permission to receive notifications on component mount.
+   */
+  useEffect(() => {
+    MessagingService.requestUserPermission();
+  }, []);
+
+  /**
    * Sets up a listener for when the app is in the background.
    */
   useEffect(() => {
-    if (!isAppInitialized) {
-      return;
+    const unsubscribe: () => void = MessagingService.listenForNotificationOpenWhenAppInBackground(
+      handlePushAuthNotification
+    );
+
+    return unsubscribe;
+  }, [handlePushAuthNotification]);
+
+  /**
+   * Sets up a listener for when the app is closed.
+   */
+  useEffect(() => {
+    if (isAppInitialized) {
+      MessagingService.listenForNotificationOpenWhenAppIsClosedExpo(handlePushAuthNotification);
+      MessagingService.listenForNotificationWhenAppIsClosedFCM(handlePushAuthNotification);
     }
-
-    const appInBackground = MessagingService.listenForNotificationOpenWhenAppInBackground(
-      handlePushAuthNotification
-    );
-    const appInForeground = MessagingService.listenForInAppMessages(
-      handlePushAuthNotification
-    );
-    MessagingService.listenForNotificationOpenWhenAppIsClosed(
-      handlePushAuthNotification
-    );
-
-    return () => {
-      MessagingService.removeNotificationListeners(appInBackground);
-      MessagingService.removeNotificationListeners(appInForeground);
-    };
-  }, [handlePushAuthNotification, isAppInitialized]);
+  }, [isAppInitialized, handlePushAuthNotification]);
 
   /**
    * Builds the push authentication URL based on the push ID.

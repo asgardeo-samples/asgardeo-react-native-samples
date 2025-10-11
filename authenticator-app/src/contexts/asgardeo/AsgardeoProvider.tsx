@@ -124,18 +124,20 @@ const AsgardeoProvider: FunctionComponent<PropsWithChildren<AsgardeoProviderProp
           </AccountProvider>
         )
       }
-      <AlertWidget
-        visible={alertConfig.visible}
-        type={alertConfig.type}
-        title={alertConfig.title}
-        message={alertConfig.message}
-        primaryButtonText={alertConfig.primaryButtonText}
-        secondaryButtonText={alertConfig.secondaryButtonText}
-        onPrimaryPress={alertConfig.onPrimaryPress}
-        onSecondaryPress={alertConfig.onSecondaryPress}
-        autoDismissTimeout={alertConfig.autoDismissTimeout}
-        icon={alertConfig.icon}
-      />
+      {alertConfig.visible && (
+        <AlertWidget
+          visible={alertConfig.visible}
+          type={alertConfig.type}
+          title={alertConfig.title}
+          message={alertConfig.message}
+          primaryButtonText={alertConfig.primaryButtonText}
+          secondaryButtonText={alertConfig.secondaryButtonText}
+          onPrimaryPress={alertConfig.onPrimaryPress}
+          onSecondaryPress={alertConfig.onSecondaryPress}
+          autoDismissTimeout={alertConfig.autoDismissTimeout}
+          icon={alertConfig.icon}
+        />
+      )}
     </AsgardeoContext.Provider>
   )
 }
