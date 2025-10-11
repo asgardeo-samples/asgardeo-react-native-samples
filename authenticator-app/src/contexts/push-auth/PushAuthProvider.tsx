@@ -117,13 +117,6 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
   }, [addPushAuthMessageToCache, router]);
 
   /**
-   * Request permission to receive notifications on component mount.
-   */
-  useEffect(() => {
-    MessagingService.requestUserPermission();
-  }, []);
-
-  /**
    * Sets up a listener for when the app is in the foreground.
    */
   useEffect(() => {
