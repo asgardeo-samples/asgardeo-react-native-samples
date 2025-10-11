@@ -31,6 +31,7 @@ const config: DeploymentConfig = rawConfig as DeploymentConfig;
 class Theme {
   private static instance: Theme;
   private configs: ThemeConfigs;
+  private activeTheme: ThemeMode;
 
   /**
    * Initializes the Theme class by determining the active theme based on user preference or system settings.
@@ -54,6 +55,7 @@ class Theme {
     }
 
     this.configs = config.ui.theme[userPreference] ?? config.ui.theme[activeTheme];
+    this.activeTheme = config.ui.theme[userPreference] ? userPreference : activeTheme;
   }
 
   /**
@@ -75,6 +77,15 @@ class Theme {
    */
   public getConfigs(): ThemeConfigs {
     return this.configs;
+  }
+
+  /**
+   * Get the active theme mode.
+   * 
+   * @returns The active theme mode.
+   */
+  public getActiveTheme(): ThemeMode {
+    return this.activeTheme;
   }
 }
 

@@ -17,7 +17,7 @@
  */
 
 import Theme from "../../utils/Theme";
-import { ThemeConfigs } from "../../models/ui";
+import { ThemeConfigs, ThemeMode } from "../../models/ui";
 import { HeaderTitleProps } from "@react-navigation/elements";
 import { ReactElement } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
@@ -38,7 +38,11 @@ const HeaderTitle = (_props: HeaderTitleProps): ReactElement => {
   return (
     <View style={[styles.appTitleContainer]}>
       <Image
-        source={require('../../../assets/images/logo.png')}
+        source={
+          Theme.getInstance().getActiveTheme() === ThemeMode.LIGHT 
+            ? require('../../../assets/images/logo.png') 
+            : require('../../../assets/images/logo_white.png')
+        }
         style={styles.appLogo}
       />
       <Text style={[styles.appName]}>{config.appHeaderText}</Text>
