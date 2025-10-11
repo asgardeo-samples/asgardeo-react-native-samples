@@ -20,10 +20,10 @@ import { PushAuthenticationDataInterface, PushAuthResponseStatus } from "../../m
 import { FunctionComponent, ReactElement, useMemo } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import usePushAuth from "../../contexts/push-auth/usePushAuth";
-import { authenticateAsync, LocalAuthenticationResult } from "expo-local-authentication";
 import { ThemeConfigs } from "../../models/ui";
 import getTimeFromNow from "../../utils/getTimeFromNow";
 import Theme from "../../utils/Theme";
+import verifyLocalAuthentication from "../../utils/verifyLocalAuthentication";
 
 const theme: ThemeConfigs = Theme.getInstance().getConfigs();
 
@@ -79,9 +79,9 @@ const AppNotification: FunctionComponent<PushAuthenticationDataInterface> = ({
    * @param status - Push authentication response status.
    */
   const handleUserResponse = (status: PushAuthResponseStatus) => {
-    authenticateAsync()
-      .then((authStatus: LocalAuthenticationResult) => {
-        if (authStatus.success) {
+    verifyLocalAuthentication()
+      .then((verified: boolean) => {
+        if (verified) {
           sentPushAuthResponse(pushId, status);
         }
       });

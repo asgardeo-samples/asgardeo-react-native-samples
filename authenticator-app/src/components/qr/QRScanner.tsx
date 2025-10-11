@@ -17,7 +17,7 @@
  */
 
 import { MaterialIcons } from "@expo/vector-icons";
-import { BarcodeScanningResult, CameraView, useCameraPermissions } from "expo-camera";
+import { BarcodeScanningResult, CameraView, PermissionResponse, useCameraPermissions } from "expo-camera";
 import { router } from "expo-router";
 import { FunctionComponent, ReactElement, RefObject, useCallback, useEffect, useRef } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -186,8 +186,17 @@ const QRScanner: FunctionComponent = (): ReactElement => {
         secondaryButtonText: "Deny",
         icon: "camera-alt",
         onPrimaryPress: () => {
-          hideAlert();
-          requestPermission();
+          requestPermission()
+            .then((value: PermissionResponse) => {
+              hideAlert();
+              if (!value.granted) {
+                router.back();
+              }
+            })
+            .catch(() => {
+              hideAlert();
+              router.back();
+            });
         },
         onSecondaryPress: () => {
           hideAlert();
