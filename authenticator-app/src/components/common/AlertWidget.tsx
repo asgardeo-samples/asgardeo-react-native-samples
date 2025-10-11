@@ -186,6 +186,7 @@ const AlertWidget: FunctionComponent<AlertProps> = ({
       transparent
       animationType="fade"
       statusBarTranslucent
+      presentationStyle="overFullScreen"
     >
       <View style={styles.overlay}>
         <View style={[styles.container, { backgroundColor: alertConfig.background }]}>

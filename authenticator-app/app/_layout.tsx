@@ -61,8 +61,7 @@ const RootLayout = (): ReactElement => {
         <Stack.Screen
           name={AppPaths.QR_SCANNER}
           options={{
-            headerShown: false,
-            presentation: "modal"
+            headerShown: false
           }}
         />
         <Stack.Screen
