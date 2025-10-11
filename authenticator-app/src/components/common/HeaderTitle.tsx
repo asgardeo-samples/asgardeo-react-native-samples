@@ -41,7 +41,7 @@ const HeaderTitle = (_props: HeaderTitleProps): ReactElement => {
         source={
           Theme.getInstance().getActiveTheme() === ThemeMode.LIGHT 
             ? require('../../../assets/images/logo.png') 
-            : require('../../../assets/images/logo_white.png')
+            : require('../../../assets/images/logo-white.png')
         }
         style={styles.appLogo}
       />
