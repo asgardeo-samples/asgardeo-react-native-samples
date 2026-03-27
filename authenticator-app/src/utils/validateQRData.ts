@@ -106,7 +106,7 @@ const validatePushNotificationFormat = (data: string): QRDataValidationResponseI
   try {
     const parsedData = JSON.parse(data);
 
-    const requiredFields = ['deviceId', 'username', 'host', 'tenantDomain', 'challenge'];
+    const requiredFields = ['deviceId', 'username', 'host', 'challenge'];
     const hasAllRequiredFields = requiredFields.every(field => !!parsedData[field]);
 
     if (!hasAllRequiredFields) {
