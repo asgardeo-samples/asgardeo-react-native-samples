@@ -97,6 +97,60 @@ export interface PushAuthenticationDataInterface extends PushCommonDataInterface
 }
 
 /**
+ * Enum for the scenarios of push notifications sent by WSO2 Identity Server.
+ */
+export enum PushNotificationScenario {
+  AUTHENTICATION = "AUTHENTICATION",
+  DEVICE_REGISTRATION = "DEVICE_REGISTRATION"
+}
+
+/**
+ * Interface representing the data of a device registration push notification.
+ */
+export interface DeviceRegistrationDataInterface {
+  /**
+   * Title of the notification.
+   */
+  title: string;
+  /**
+   * Body text of the notification.
+   */
+  body: string;
+  /**
+   * Username of the account the new device was registered to.
+   */
+  username?: string;
+  /**
+   * Tenant domain of the account.
+   */
+  tenantDomain?: string;
+  /**
+   * Organization name of an organization user.
+   */
+  organizationName?: string;
+  /**
+   * IP address from which the new device was registered.
+   */
+  ipAddress?: string;
+  /**
+   * Name of the newly registered device.
+   */
+  deviceName?: string;
+  /**
+   * Model of the newly registered device.
+   */
+  deviceModel?: string;
+  /**
+   * Registration time as an ISO-8601 string.
+   */
+  registrationTime?: string;
+  /**
+   * Time when the push notification was sent in milliseconds since epoch.
+   */
+  sentTime: number;
+}
+
+/**
  * Enum for push authentication response statuses.
  */
 export enum PushAuthResponseStatus {

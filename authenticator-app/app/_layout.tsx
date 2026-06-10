@@ -71,6 +71,12 @@ const RootLayout = (): ReactElement => {
           }}
         />
         <Stack.Screen
+          name={AppPaths.DEVICE_REGISTRATION}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
           name={AppPaths.ACCOUNT}
           options={({ route }) => ({
             headerStyle: { backgroundColor: theme.colors.header.background },
