@@ -24,16 +24,71 @@ import messaging, {
   onNotificationOpenedApp,
   getInitialNotification
 } from '@react-native-firebase/messaging';
-import { PushAuthenticationDataInterface } from '../models/push-notification';
+import {
+  DeviceRegistrationDataInterface,
+  PushAuthenticationDataInterface,
+  PushNotificationScenario
+} from '../models/push-notification';
 import { PermissionsAndroid, Platform } from 'react-native';
-import { getLastNotificationResponse, NotificationResponse, clearLastNotificationResponse } from "expo-notifications";
+import {
+  addNotificationResponseReceivedListener,
+  getLastNotificationResponse,
+  NotificationResponse,
+  clearLastNotificationResponse,
+  scheduleNotificationAsync,
+  setNotificationHandler
+} from "expo-notifications";
+import formatDateTime from './formatDateTime';
 
 const messagingInstance: FirebaseMessagingTypes.Module = messaging();
+
+/**
+ * Allow locally displayed notifications (e.g. device registration alerts) to be
+ * shown while the app is in the foreground. Without a handler, expo-notifications
+ * discards them silently.
+ */
+setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true
+  })
+});
 
 /**
  * Class containing messaging service utility methods.
  */
 class MessagingService {
+  /**
+   * FCM data payload keys carrying the registered device details. Both the
+   * kebab-case originals set on the server-side event and the camelCase variants
+   * produced by the FCM publisher are accepted.
+   */
+  private static readonly DEVICE_NAME_KEYS: string[] = ['push-device-name', 'pushDeviceName'];
+  private static readonly DEVICE_MODEL_KEYS: string[] = ['push-device-model', 'pushDeviceModel'];
+  private static readonly REGISTRATION_TIME_KEYS: string[] = ['registration-time', 'registrationTime'];
+  private static readonly IP_ADDRESS_KEYS: string[] = ['ipAddress', 'ip-address'];
+  private static readonly USERNAME_KEYS: string[] = ['username', 'user-name', 'userName'];
+  private static readonly TENANT_DOMAIN_KEYS: string[] = ['tenantDomain', 'tenant-domain'];
+  private static readonly ORGANIZATION_NAME_KEYS: string[] = ['organizationName', 'organization-name'];
+
+  /**
+   * Returns the first non-empty value found in the data payload for the given keys.
+   */
+  private static pickDataValue(data: Record<string, unknown> | undefined, keys: string[]): string | undefined {
+    if (!data) {
+      return undefined;
+    }
+    for (const key of keys) {
+      const value = data[key];
+      if (value !== undefined && value !== null && value !== '') {
+        return String(value);
+      }
+    }
+    return undefined;
+  }
+
   /**
    * Requests user permissions to display offline notifications.
    */
@@ -119,6 +174,138 @@ class MessagingService {
   }
 
   /**
+   * Checks whether the given notification data payload belongs to a device
+   * registration notification.
+   *
+   * @param data - The data payload of the notification.
+   * @returns Whether the payload is a device registration notification.
+   */
+  private static isDeviceRegistrationScenario(data?: Record<string, unknown>): boolean {
+    return data?.notificationScenario === PushNotificationScenario.DEVICE_REGISTRATION;
+  }
+
+  /**
+   * Extracts the registered device details from the FCM data payload.
+   *
+   * @param data - The data payload of the notification.
+   * @returns The extracted device details, or an empty object if the payload is missing.
+   */
+  private static parseDeviceRegistrationData(
+    data?: Record<string, unknown>
+  ): Pick<DeviceRegistrationDataInterface, 'deviceName' | 'deviceModel' | 'registrationTime'> {
+    if (!data) {
+      return {};
+    }
+
+    return {
+      deviceName: this.pickDataValue(data, this.DEVICE_NAME_KEYS),
+      deviceModel: this.pickDataValue(data, this.DEVICE_MODEL_KEYS),
+      registrationTime: this.pickDataValue(data, this.REGISTRATION_TIME_KEYS)
+    };
+  }
+
+  /**
+   * Creates a device registration data payload from the received message.
+   *
+   * @param message - The received remote message.
+   * @returns The device registration data payload.
+   */
+  private static createDeviceRegistrationPayload(
+    message: FirebaseMessagingTypes.RemoteMessage
+  ): DeviceRegistrationDataInterface {
+    console.log('[MessagingService] FCM device-registration data keys:', message.data && Object.keys(message.data));
+    console.log('[MessagingService] FCM device-registration data:', JSON.stringify(message.data));
+
+    return {
+      title: message.notification?.title ?? 'New Device Registered',
+      body: message.notification?.body ?? 'A new device was registered to your account.',
+      username: this.pickDataValue(message.data, this.USERNAME_KEYS),
+      tenantDomain: this.pickDataValue(message.data, this.TENANT_DOMAIN_KEYS),
+      organizationName: this.pickDataValue(message.data, this.ORGANIZATION_NAME_KEYS),
+      ipAddress: this.pickDataValue(message.data, this.IP_ADDRESS_KEYS),
+      ...this.parseDeviceRegistrationData(message.data),
+      sentTime: (message.sentTime as number) ?? Date.now()
+    };
+  }
+
+  /**
+   * Creates a device registration data payload from the notification response.
+   *
+   * @param response - The notification response from Expo.
+   * @returns The device registration data payload.
+   */
+  private static createDeviceRegistrationPayloadFromExpo(
+    response: NotificationResponse
+  ): DeviceRegistrationDataInterface {
+    const content = response.notification.request.content;
+    const data = content.data as Record<string, unknown> | undefined;
+
+    console.log('[MessagingService] Expo device-registration data keys:', data && Object.keys(data));
+    console.log('[MessagingService] Expo device-registration data:', JSON.stringify(data));
+
+    return {
+      title: content.title ?? 'New Device Registered',
+      body: content.body ?? 'A new device was registered to your account.',
+      username: this.pickDataValue(data, this.USERNAME_KEYS),
+      tenantDomain: this.pickDataValue(data, this.TENANT_DOMAIN_KEYS),
+      organizationName: this.pickDataValue(data, this.ORGANIZATION_NAME_KEYS),
+      ipAddress: this.pickDataValue(data, this.IP_ADDRESS_KEYS),
+      ...this.parseDeviceRegistrationData(data),
+      sentTime: response.notification.date as number
+    };
+  }
+
+  /**
+   * Displays an informational push notification (e.g. a device registration alert)
+   * as a local notification.
+   *
+   * The OS only renders the notification payload of an FCM message automatically
+   * when the app is in the background, so messages received in the foreground
+   * have to be re-displayed locally to become visible to the user.
+   *
+   * @param message - The received remote message.
+   */
+  private static async displayNotification(message: FirebaseMessagingTypes.RemoteMessage): Promise<void> {
+    let body: string = message.notification?.body ?? 'A new device was registered to your account.';
+
+    // Replace the raw ISO-8601 timestamp in the body with a user friendly local time.
+    const { registrationTime } = this.parseDeviceRegistrationData(message.data);
+    if (registrationTime) {
+      body = body.replace(registrationTime, formatDateTime(registrationTime));
+    }
+
+    await scheduleNotificationAsync({
+      content: {
+        title: message.notification?.title ?? 'New Device Registered',
+        body,
+        data: message.data
+      },
+      trigger: null
+    });
+  }
+
+  /**
+   * Listens for taps on notifications displayed by the app itself
+   * (e.g. device registration alerts shown while the app is in the foreground).
+   *
+   * @param onDeviceRegistration - The callback to execute when a device registration notification is tapped.
+   * @returns A function to unsubscribe from the listener.
+   */
+  static listenForNotificationTaps(
+    onDeviceRegistration: (data: DeviceRegistrationDataInterface) => void
+  ): () => void {
+    const subscription = addNotificationResponseReceivedListener((response: NotificationResponse) => {
+      const data = response?.notification?.request?.content?.data;
+
+      if (this.isDeviceRegistrationScenario(data)) {
+        onDeviceRegistration(this.createDeviceRegistrationPayloadFromExpo(response));
+      }
+    });
+
+    return () => subscription.remove();
+  }
+
+  /**
    * Listens for incoming in-app messages when the app is in the foreground.
    *
    * @param router - The router instance to navigate on message receipt.
@@ -126,6 +313,16 @@ class MessagingService {
    */
   static listenForInAppMessages(callback: (data: PushAuthenticationDataInterface) => void): () => void {
     return onMessage(messagingInstance, (message: FirebaseMessagingTypes.RemoteMessage) => {
+      /*
+       * Device registration notifications are informational only. They carry no
+       * pushId, so they must be displayed directly instead of being routed to
+       * the push authentication flow.
+       */
+      if (message.data?.notificationScenario === PushNotificationScenario.DEVICE_REGISTRATION) {
+        this.displayNotification(message);
+        return;
+      }
+
       const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayload(message);
       if (pushData) {
         callback(pushData);
@@ -137,12 +334,19 @@ class MessagingService {
    * Listens for notification opens when the app is in the background.
    *
    * @param callback - The callback to execute on notification open.
+   * @param onDeviceRegistration - The callback to execute when a device registration notification is opened.
    * @returns A function to unsubscribe from notification open listener.
    */
   static listenForNotificationOpenWhenAppInBackground(
-    callback: (data: PushAuthenticationDataInterface) => void
+    callback: (data: PushAuthenticationDataInterface) => void,
+    onDeviceRegistration?: (data: DeviceRegistrationDataInterface) => void
   ): () => void {
     return onNotificationOpenedApp(messagingInstance, (message: FirebaseMessagingTypes.RemoteMessage) => {
+      if (this.isDeviceRegistrationScenario(message.data)) {
+        onDeviceRegistration?.(this.createDeviceRegistrationPayload(message));
+        return;
+      }
+
       const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayload(message);
       if (pushData) {
         callback(pushData);
@@ -154,10 +358,19 @@ class MessagingService {
    * Sets up a listener for when the app is closed.
    *
    * @param callback - The callback to execute on notification open.
+   * @param onDeviceRegistration - The callback to execute when a device registration notification is opened.
    */
-  static listenForNotificationOpenWhenAppIsClosedExpo(callback: (data: PushAuthenticationDataInterface) => void): void {
+  static listenForNotificationOpenWhenAppIsClosedExpo(
+    callback: (data: PushAuthenticationDataInterface) => void,
+    onDeviceRegistration?: (data: DeviceRegistrationDataInterface) => void
+  ): void {
     const response: NotificationResponse | null = getLastNotificationResponse();
     if (response) {
+      if (this.isDeviceRegistrationScenario(response.notification?.request?.content?.data)) {
+        onDeviceRegistration?.(this.createDeviceRegistrationPayloadFromExpo(response));
+        return;
+      }
+
       const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayloadFromExpo(response);
       if (pushData) {
         callback(pushData);
@@ -169,11 +382,20 @@ class MessagingService {
    * Sets up a listener for when the app is closed using FCM.
    *
    * @param callback - The callback to execute on notification open.
+   * @param onDeviceRegistration - The callback to execute when a device registration notification is opened.
    */
-  static listenForNotificationWhenAppIsClosedFCM(callback: (data: PushAuthenticationDataInterface) => void): void {
+  static listenForNotificationWhenAppIsClosedFCM(
+    callback: (data: PushAuthenticationDataInterface) => void,
+    onDeviceRegistration?: (data: DeviceRegistrationDataInterface) => void
+  ): void {
     getInitialNotification(messagingInstance)
       .then((message: FirebaseMessagingTypes.RemoteMessage | null) => {
         if (message) {
+          if (this.isDeviceRegistrationScenario(message.data)) {
+            onDeviceRegistration?.(this.createDeviceRegistrationPayload(message));
+            return;
+          }
+
           const pushData: PushAuthenticationDataInterface | null = this.createPushDataPayload(message);
           if (pushData) {
             callback(pushData);

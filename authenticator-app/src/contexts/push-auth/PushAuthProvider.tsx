@@ -22,6 +22,7 @@ import { FunctionComponent, PropsWithChildren, ReactElement, useCallback, useEff
 import AlertWidget, { AlertType } from "../../components/common/AlertWidget";
 import StorageConstants from "../../constants/StorageConstants";
 import {
+  DeviceRegistrationDataInterface,
   PushAuthenticationDataInterface,
   PushAuthJWTBodyInterface,
   PushAuthJWTHeaderInterface,
@@ -44,6 +45,18 @@ import useAccount from "../account/useAccount";
 import rawConfig from "../../../config/app.config.json";
 
 const config: DeploymentConfig = rawConfig as DeploymentConfig;
+
+/**
+ * Server error code indicating the push authentication request has already been
+ * completed (e.g. approved from another device) or has expired.
+ */
+const ALREADY_HANDLED_ERROR_CODE: string = 'PBA-15011';
+
+/**
+ * Server error code indicating the push authentication context no longer exists.
+ * Returned by older servers for already-handled or expired requests.
+ */
+const AUTH_CONTEXT_NOT_FOUND_ERROR_CODE: string = 'PBA-15010';
 
 /**
  * Push Authentication Provider component.
@@ -117,6 +130,29 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
   }, [addPushAuthMessageToCache, router]);
 
   /**
+   * Handles device registration notifications by navigating to the
+   * notification details screen.
+   *
+   * @param data - The device registration data received from the notification.
+   */
+  const handleDeviceRegistrationNotification = useCallback((data: DeviceRegistrationDataInterface) => {
+    const params: Record<string, string> = {};
+
+    // Route params must be strings; skip undefined values so the details
+    // screen can fall back gracefully for missing fields.
+    Object.entries(data).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        params[key] = String(value);
+      }
+    });
+
+    router.push({
+      pathname: '/device-registration',
+      params
+    });
+  }, [router]);
+
+  /**
    * Sets up a listener for when the app is in the foreground.
    */
   useEffect(() => {
@@ -124,6 +160,18 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
 
     return unsubscribe;
   }, [handlePushAuthNotification]);
+
+  /**
+   * Sets up a listener for taps on notifications displayed by the app itself
+   * (e.g. device registration alerts shown while the app is in the foreground).
+   */
+  useEffect(() => {
+    const unsubscribe: () => void = MessagingService.listenForNotificationTaps(
+      handleDeviceRegistrationNotification
+    );
+
+    return unsubscribe;
+  }, [handleDeviceRegistrationNotification]);
 
   /**
    * Request permission to receive notifications on component mount.
@@ -137,21 +185,28 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
    */
   useEffect(() => {
     const unsubscribe: () => void = MessagingService.listenForNotificationOpenWhenAppInBackground(
-      handlePushAuthNotification
+      handlePushAuthNotification,
+      handleDeviceRegistrationNotification
     );
 
     return unsubscribe;
-  }, [handlePushAuthNotification]);
+  }, [handlePushAuthNotification, handleDeviceRegistrationNotification]);
 
   /**
    * Sets up a listener for when the app is closed.
    */
   useEffect(() => {
     if (isAppInitialized) {
-      MessagingService.listenForNotificationOpenWhenAppIsClosedExpo(handlePushAuthNotification);
-      MessagingService.listenForNotificationWhenAppIsClosedFCM(handlePushAuthNotification);
+      MessagingService.listenForNotificationOpenWhenAppIsClosedExpo(
+        handlePushAuthNotification,
+        handleDeviceRegistrationNotification
+      );
+      MessagingService.listenForNotificationWhenAppIsClosedFCM(
+        handlePushAuthNotification,
+        handleDeviceRegistrationNotification
+      );
     }
-  }, [isAppInitialized, handlePushAuthNotification]);
+  }, [isAppInitialized, handlePushAuthNotification, handleDeviceRegistrationNotification]);
 
   /**
    * Builds the push authentication URL based on the push ID.
@@ -164,7 +219,9 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
     const { tenantDomain, organizationId } = pushAuthMessageCache[id];
     const hostName: string = resolveHostName(accountDetails.host!);
 
-    if (organizationId) {
+    if (organizationId && tenantDomain) {
+        return `${hostName}/t/${tenantDomain}/o/${organizationId}/push-auth/authenticate`;
+    } else if (organizationId) {
       return `${hostName}/o/${organizationId}/push-auth/authenticate`;
     } else if (tenantDomain) {
       return `${hostName}/t/${tenantDomain}/push-auth/authenticate`;
@@ -233,7 +290,27 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
       if (result.status === 200) {
         showAlert(AlertType.SUCCESS, 'Response Sent', 'Your response has been sent successfully.');
       } else {
-        showAlert(AlertType.ERROR, 'Response Failed', 'Failed to send your response. Please try again.');
+        const error: { code?: string } | null = await result.json().catch(() => null);
+
+        /*
+         * The authentication request has already been handled (e.g. the user approved the login from
+         * another device) or has expired. This is not a failure on the user's part, so show an
+         * informational alert instead of an error.
+         */
+        if (
+          result.status === 410 ||
+          error?.code === ALREADY_HANDLED_ERROR_CODE ||
+          error?.code === AUTH_CONTEXT_NOT_FOUND_ERROR_CODE
+        ) {
+          showAlert(
+            AlertType.INFO,
+            'Request Already Handled',
+            'This sign-in request was already responded to from another device or has expired. ' +
+              'No further action is needed.'
+          );
+        } else {
+          showAlert(AlertType.ERROR, 'Response Failed', 'Failed to send your response. Please try again.');
+        }
       }
     } catch {
       showAlert(AlertType.ERROR, 'Response Failed', 'Failed to send your response. Please try again.');
@@ -341,7 +418,7 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
           qrData.tenantDomain
         );
 
-        if (storageData.length === 0) {
+        if (storageData.length === 0 && qrData.organizationId) {
           storageData = getAccountByItemKey(
             'username',
             `^(.+\\/${qrData.username}|${qrData.username})$`,
@@ -359,7 +436,7 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
           );
         }
 
-        if (storageData.length === 0) {
+        if (storageData.length === 0 && qrData.organizationId) {
           storageData = getAccountByItemKey(
             'username',
             `^(.+\\/${qrData.username}|${qrData.username})$`,
@@ -376,7 +453,7 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
             deviceId: qrData.deviceId,
             host: qrData.host,
             username: qrData.username,
-            displayName: qrData.organizationName ?? qrData.tenantDomain,
+            displayName: qrData.organizationName ?? qrData.tenantDomain ?? '',
             tenantDomain: qrData.tenantDomain,
             organizationId: qrData.organizationId
           };

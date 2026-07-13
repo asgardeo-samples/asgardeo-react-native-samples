@@ -106,10 +106,14 @@ const validatePushNotificationFormat = (data: string): QRDataValidationResponseI
   try {
     const parsedData = JSON.parse(data);
 
-    const requiredFields = ['deviceId', 'username', 'host', 'tenantDomain', 'challenge'];
+    const requiredFields = ['deviceId', 'username', 'host', 'challenge'];
     const hasAllRequiredFields = requiredFields.every(field => !!parsedData[field]);
 
-    if (!hasAllRequiredFields) {
+    // Either the tenant domain (for tenant users) or the organization name
+    // (for organization users) must be present, but not necessarily both.
+    const hasTenantOrOrganization = !!parsedData.tenantDomain || !!parsedData.organizationName;
+
+    if (!hasAllRequiredFields || !hasTenantOrOrganization) {
       return response;
     }
 

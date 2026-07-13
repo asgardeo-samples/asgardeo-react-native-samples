@@ -51,6 +51,11 @@ class AppPaths {
   static readonly PUSH_AUTH_HISTORY = 'push-auth-history';
 
   /**
+   * Path to the device registration notification screen.
+   */
+  static readonly DEVICE_REGISTRATION = 'device-registration';
+
+  /**
    * Path to the push authentication registration API endpoint.
    */
   static readonly PUSH_AUTH_REGISTRATION_SERVER: string = '/api/users/v1/me/push/devices';

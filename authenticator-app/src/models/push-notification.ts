@@ -23,8 +23,9 @@ export interface PushCommonDataInterface {
   username: string;
   /**
    * The tenant domain of the user trying to register a device.
+   * Present for tenant users; organization users carry `organizationName` instead.
    */
-  tenantDomain: string;
+  tenantDomain?: string;
   /**
    * Organization ID of an organization user.
    */
@@ -90,6 +91,60 @@ export interface PushAuthenticationDataInterface extends PushCommonDataInterface
    * Browser used by the user.
    */
   browser: string;
+  /**
+   * Time when the push notification was sent in milliseconds since epoch.
+   */
+  sentTime: number;
+}
+
+/**
+ * Enum for the scenarios of push notifications sent by WSO2 Identity Server.
+ */
+export enum PushNotificationScenario {
+  AUTHENTICATION = "AUTHENTICATION",
+  DEVICE_REGISTRATION = "DEVICE_REGISTRATION"
+}
+
+/**
+ * Interface representing the data of a device registration push notification.
+ */
+export interface DeviceRegistrationDataInterface {
+  /**
+   * Title of the notification.
+   */
+  title: string;
+  /**
+   * Body text of the notification.
+   */
+  body: string;
+  /**
+   * Username of the account the new device was registered to.
+   */
+  username?: string;
+  /**
+   * Tenant domain of the account.
+   */
+  tenantDomain?: string;
+  /**
+   * Organization name of an organization user.
+   */
+  organizationName?: string;
+  /**
+   * IP address from which the new device was registered.
+   */
+  ipAddress?: string;
+  /**
+   * Name of the newly registered device.
+   */
+  deviceName?: string;
+  /**
+   * Model of the newly registered device.
+   */
+  deviceModel?: string;
+  /**
+   * Registration time as an ISO-8601 string.
+   */
+  registrationTime?: string;
   /**
    * Time when the push notification was sent in milliseconds since epoch.
    */
