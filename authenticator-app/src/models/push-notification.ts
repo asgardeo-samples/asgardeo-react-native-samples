@@ -23,8 +23,9 @@ export interface PushCommonDataInterface {
   username: string;
   /**
    * The tenant domain of the user trying to register a device.
+   * Present for tenant users; organization users carry `organizationName` instead.
    */
-  tenantDomain: string;
+  tenantDomain?: string;
   /**
    * Organization ID of an organization user.
    */

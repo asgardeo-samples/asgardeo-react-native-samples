@@ -219,7 +219,9 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
     const { tenantDomain, organizationId } = pushAuthMessageCache[id];
     const hostName: string = resolveHostName(accountDetails.host!);
 
-    if (organizationId) {
+    if (organizationId && tenantDomain) {
+        return `${hostName}/t/${tenantDomain}/o/${organizationId}/push-auth/authenticate`;
+    } else if (organizationId) {
       return `${hostName}/o/${organizationId}/push-auth/authenticate`;
     } else if (tenantDomain) {
       return `${hostName}/t/${tenantDomain}/push-auth/authenticate`;
@@ -451,7 +453,7 @@ const PushAuthProvider: FunctionComponent<PropsWithChildren> = ({
             deviceId: qrData.deviceId,
             host: qrData.host,
             username: qrData.username,
-            displayName: qrData.organizationName ?? qrData.tenantDomain,
+            displayName: qrData.organizationName ?? qrData.tenantDomain ?? '',
             tenantDomain: qrData.tenantDomain,
             organizationId: qrData.organizationId
           };
